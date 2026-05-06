@@ -52,7 +52,13 @@
       "Bash(curl -s -b /tmp/jar.txt http://localhost:3000/dashboard/reports -o /tmp/reports.html -w \"reports=%{http_code}\\\\n\")",
       "Bash(curl -s -b /tmp/jar.txt http://localhost:3000/dashboard/team -o /tmp/team.html -w \"team=%{http_code}\\\\n\")",
       "Bash(kill bsvzlf68v *)",
-      "Bash(pkill -f \"next dev\")"
+      "Bash(pkill -f \"next dev\")",
+      "Bash(git push *)",
+      "Bash(rm -f data/app.db data/app.db-*)",
+      "Bash(npm uninstall *)",
+      "Bash(rm -f data/app.db)",
+      "Bash(bash -c 'rm -f data/app.db data/app.db-journal data/app.db-wal data/app.db-shm 2>/dev/null; true')",
+      "Bash(git add *)"
     ]
   }
 }
