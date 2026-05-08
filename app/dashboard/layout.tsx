@@ -19,6 +19,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
           </Link>
           <nav className="flex items-center gap-1 text-sm">
             <NavLink href="/dashboard">Team</NavLink>
+            <NavLink href="/dashboard/designs">Designs</NavLink>
             <NavLink href="/dashboard/reports">Reports</NavLink>
             {role === 'primary' && <NavLink href="/dashboard/team">Manage</NavLink>}
           </nav>

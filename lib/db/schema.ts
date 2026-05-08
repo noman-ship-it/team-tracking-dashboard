@@ -115,8 +115,58 @@ export const monthlySnapshots = sqliteTable(
   })
 );
 
+export const PLATFORMS = ['instagram', 'twitter', 'linkedin', 'youtube', 'tiktok', 'web', 'other'] as const;
+export type Platform = (typeof PLATFORMS)[number];
+
+export const METRIC_TYPES = ['impressions', 'reach', 'engagements', 'clicks', 'conversions'] as const;
+export type MetricType = (typeof METRIC_TYPES)[number];
+
+export const designAssets = sqliteTable(
+  'design_assets',
+  {
+    id: integer('id').primaryKey({ autoIncrement: true }),
+    teamMemberId: integer('team_member_id')
+      .notNull()
+      .references(() => teamMembers.id, { onDelete: 'cascade' }),
+    name: text('name').notNull(),
+    link: text('link').notNull().default(''),
+    platform: text('platform', { enum: PLATFORMS }).notNull().default('other'),
+    archivedAt: integer('archived_at', { mode: 'timestamp' }),
+    createdAt: integer('created_at', { mode: 'timestamp' })
+      .notNull()
+      .default(sql`(unixepoch())`),
+  },
+  (t) => ({
+    ownerIdx: index('design_assets_owner_idx').on(t.teamMemberId),
+  })
+);
+
+export const designMetrics = sqliteTable(
+  'design_metrics',
+  {
+    id: integer('id').primaryKey({ autoIncrement: true }),
+    designAssetId: integer('design_asset_id')
+      .notNull()
+      .references(() => designAssets.id, { onDelete: 'cascade' }),
+    metricType: text('metric_type', { enum: METRIC_TYPES }).notNull().default('impressions'),
+    value: integer('value').notNull(),
+    recordedAt: integer('recorded_at', { mode: 'timestamp' })
+      .notNull()
+      .default(sql`(unixepoch())`),
+    managerId: integer('manager_id')
+      .notNull()
+      .references(() => users.id),
+    note: text('note').notNull().default(''),
+  },
+  (t) => ({
+    assetIdx: index('design_metrics_asset_idx').on(t.designAssetId, t.recordedAt),
+  })
+);
+
 export type User = typeof users.$inferSelect;
 export type TeamMember = typeof teamMembers.$inferSelect;
 export type Event = typeof events.$inferSelect;
 export type ManagerNote = typeof managerNotes.$inferSelect;
 export type MonthlySnapshot = typeof monthlySnapshots.$inferSelect;
+export type DesignAsset = typeof designAssets.$inferSelect;
+export type DesignMetric = typeof designMetrics.$inferSelect;

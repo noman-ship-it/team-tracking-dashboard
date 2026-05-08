@@ -58,7 +58,14 @@
       "Bash(npm uninstall *)",
       "Bash(rm -f data/app.db)",
       "Bash(bash -c 'rm -f data/app.db data/app.db-journal data/app.db-wal data/app.db-shm 2>/dev/null; true')",
-      "Bash(git add *)"
+      "Bash(git add *)",
+      "Bash(git -c commit.gpgsign=false commit -q -m ' *)",
+      "Bash(curl -fsSL -o /tmp/cf.tgz https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-darwin-amd64.tgz)",
+      "Bash(tar -xzf /tmp/cf.tgz -C /tmp)",
+      "Bash(mv /tmp/cloudflared ~/.local/bin/cloudflared)",
+      "Bash(chmod +x ~/.local/bin/cloudflared)",
+      "Bash(rm /tmp/cf.tgz)",
+      "Bash(pkill cloudflared *)"
     ]
   }
 }
