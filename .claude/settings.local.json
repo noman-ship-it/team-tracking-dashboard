@@ -74,7 +74,25 @@
       "Bash(sed -i '' 's/className=\"text-3xl font-semibold tracking-tight\">Designs/className=\"font-display text-3xl font-bold tracking-tight\">Designs/' \"/Users/hf/Claude Code/Team Tracking Dashboard/app/dashboard/designs/page.tsx\")",
       "Bash(sed -i '' 's/className=\"text-3xl font-semibold\">{member/className=\"font-display text-3xl font-bold tracking-tight\">{member/' \"/Users/hf/Claude Code/Team Tracking Dashboard/app/dashboard/members/\"*/page.tsx)",
       "Bash(sed -i '' 's/className=\"text-3xl font-semibold tabular-nums\">{round1\\(score\\)/className=\"font-display text-3xl font-bold tabular-nums\">{round1\\(score\\)/' \"/Users/hf/Claude Code/Team Tracking Dashboard/app/dashboard/members/\"*/page.tsx)",
-      "Bash(git commit -m ' *)"
+      "Bash(git commit -m ' *)",
+      "Bash(npx vercel *)",
+      "mcp__Claude_in_Chrome__tabs_context_mcp",
+      "Bash(vercel --version)",
+      "Bash(~/.local/bin/vercel --version)",
+      "Bash(curl -sSfL https://get.tur.so/install.sh)",
+      "Bash(bash)",
+      "Bash(~/.turso/bin/turso --version)",
+      "Bash(ls ~/.turso/bin/ 2>/dev/null && ~/.turso/bin/turso --version)",
+      "Bash(find ~ -name \"turso\" -type f 2>/dev/null | head -5)",
+      "Bash(/Users/hf/.turso/turso auth *)",
+      "Bash(/Users/hf/.turso/turso db *)",
+      "Bash(TURSO_DATABASE_URL=$\\(/Users/hf/.turso/turso db show teampulse --url\\) TURSO_AUTH_TOKEN=$\\(/Users/hf/.turso/turso db tokens create teampulse\\) npm run db:migrate)",
+      "Bash(TURSO_DATABASE_URL=$\\(/Users/hf/.turso/turso db show teampulse --url\\) TURSO_AUTH_TOKEN=$\\(/Users/hf/.turso/turso db tokens create teampulse\\) npm run db:seed)",
+      "Bash(vercel login *)",
+      "Bash(vercel whoami *)",
+      "Bash(npm list *)",
+      "Bash(npx --yes vercel whoami)",
+      "Bash(node -e \"console.log\\(require\\('./node_modules/next/package.json'\\).version\\)\")"
     ]
   }
 }

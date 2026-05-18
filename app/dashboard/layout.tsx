@@ -27,9 +27,12 @@ export default async function DashboardLayout({ children }: { children: React.Re
             {role === 'primary' && <NavLink href="/dashboard/manage">Manage</NavLink>}
           </nav>
           <div className="ml-auto flex items-center gap-2">
-            <span className="hidden text-xs text-muted-foreground sm:inline">
+            <Link
+              href="/dashboard/settings"
+              className="hidden text-xs text-muted-foreground hover:text-foreground sm:inline"
+            >
               {session.name} · {role}
-            </span>
+            </Link>
             <ThemeToggle />
             <LogoutButton />
           </div>
