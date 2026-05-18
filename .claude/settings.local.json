@@ -73,7 +73,8 @@
       "Bash(node -e ' *)",
       "Bash(sed -i '' 's/className=\"text-3xl font-semibold tracking-tight\">Designs/className=\"font-display text-3xl font-bold tracking-tight\">Designs/' \"/Users/hf/Claude Code/Team Tracking Dashboard/app/dashboard/designs/page.tsx\")",
       "Bash(sed -i '' 's/className=\"text-3xl font-semibold\">{member/className=\"font-display text-3xl font-bold tracking-tight\">{member/' \"/Users/hf/Claude Code/Team Tracking Dashboard/app/dashboard/members/\"*/page.tsx)",
-      "Bash(sed -i '' 's/className=\"text-3xl font-semibold tabular-nums\">{round1\\(score\\)/className=\"font-display text-3xl font-bold tabular-nums\">{round1\\(score\\)/' \"/Users/hf/Claude Code/Team Tracking Dashboard/app/dashboard/members/\"*/page.tsx)"
+      "Bash(sed -i '' 's/className=\"text-3xl font-semibold tabular-nums\">{round1\\(score\\)/className=\"font-display text-3xl font-bold tabular-nums\">{round1\\(score\\)/' \"/Users/hf/Claude Code/Team Tracking Dashboard/app/dashboard/members/\"*/page.tsx)",
+      "Bash(git commit -m ' *)"
     ]
   }
 }

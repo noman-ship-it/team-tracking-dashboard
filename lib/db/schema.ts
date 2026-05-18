@@ -163,6 +163,24 @@ export const designMetrics = sqliteTable(
   })
 );
 
+export const kpiOverrides = sqliteTable(
+  'kpi_overrides',
+  {
+    id: integer('id').primaryKey({ autoIncrement: true }),
+    year: integer('year').notNull(),
+    month: integer('month').notNull(),
+    key: text('key').notNull(),
+    value: integer('value').notNull().default(0),
+    updatedAt: integer('updated_at', { mode: 'timestamp' })
+      .notNull()
+      .default(sql`(unixepoch())`),
+  },
+  (t) => ({
+    uniqIdx: uniqueIndex('kpi_overrides_uniq_idx').on(t.year, t.month, t.key),
+  })
+);
+export type KpiOverride = typeof kpiOverrides.$inferSelect;
+
 export type User = typeof users.$inferSelect;
 export type TeamMember = typeof teamMembers.$inferSelect;
 export type Event = typeof events.$inferSelect;

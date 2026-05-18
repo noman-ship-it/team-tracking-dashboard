@@ -1,0 +1,9 @@
+CREATE TABLE IF NOT EXISTS kpi_overrides (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  year INTEGER NOT NULL,
+  month INTEGER NOT NULL,
+  key TEXT NOT NULL,
+  value INTEGER NOT NULL DEFAULT 0,
+  updated_at INTEGER NOT NULL DEFAULT (unixepoch()),
+  UNIQUE(year, month, key)
+);

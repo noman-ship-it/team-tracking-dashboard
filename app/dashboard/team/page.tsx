@@ -9,27 +9,28 @@ import {
   Sparkles,
   TrendingUp,
   Trophy,
-  Users,
 } from 'lucide-react';
 import { summarizeAll } from '@/lib/data/members';
 import { listDesigns, topDesignsByImpressions } from '@/lib/data/designs';
 import { monthEventCounts } from '@/lib/data/activity';
+import { getKpiOverride } from '@/lib/data/kpi';
 import { STATUS_LABELS, STATUS_RANK } from '@/lib/scoring/config';
 import { round1 } from '@/lib/utils';
 import { TeamGrid } from '@/components/team-grid';
+import { EditableKpiTile } from '@/components/editable-kpi-tile';
 import { ScoringInfo } from '../scoring-info';
+import { updateKpiOverride } from './actions';
 import type { MemberSummary } from '@/lib/data/members';
 
 export const dynamic = 'force-dynamic';
 
-/* ─── formatting helpers ─────────────────────────────────────── */
+/* ─── helpers ────────────────────────────────────────────────── */
 function fmt(n: number): string {
   if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`;
   if (n >= 1_000) return `${(n / 1_000).toFixed(1)}k`;
   return n.toString();
 }
 
-/* ─── health score ────────────────────────────────────────────── */
 function computeHealthScore(
   summaries: MemberSummary[],
   positiveCount: number,
@@ -41,26 +42,20 @@ function computeHealthScore(
   const qualityRatio = totalCount > 0 ? positiveCount / totalCount : 0.5;
   const activityBonus = Math.min(totalCount / Math.max(summaries.length * 2, 1), 1);
 
-  const raw =
-    ((avgRank - 1) / 4) * 55 +
-    qualityRatio * 30 +
-    activityBonus * 15;
-
+  const raw = ((avgRank - 1) / 4) * 55 + qualityRatio * 30 + activityBonus * 15;
   const score = Math.round(Math.max(0, Math.min(100, raw)));
 
   const label =
     score >= 80 ? 'Excellent' :
     score >= 65 ? 'Good' :
     score >= 50 ? 'Fair' :
-    score >= 35 ? 'Poor' :
-    'Critical';
+    score >= 35 ? 'Poor' : 'Critical';
 
   const color =
     score >= 80 ? 'status-fg-going-great' :
     score >= 65 ? 'status-fg-on-track' :
     score >= 50 ? 'status-fg-needs-attention' :
-    score >= 35 ? 'status-fg-behind-target' :
-    'status-fg-at-risk';
+    score >= 35 ? 'status-fg-behind-target' : 'status-fg-at-risk';
 
   return { score, label, color };
 }
@@ -68,41 +63,47 @@ function computeHealthScore(
 /* ─── page ────────────────────────────────────────────────────── */
 export default async function TeamPage() {
   const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth() + 1; // 1-indexed
   const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
 
-  const [summaries, designs, topDesigns, monthCounts] = await Promise.all([
-    summarizeAll(),
-    listDesigns(false),
-    topDesignsByImpressions(1),
-    monthEventCounts(),
-  ]);
+  const [summaries, designs, topDesigns, monthCounts, designsOverride, impressionsOverride] =
+    await Promise.all([
+      summarizeAll(),
+      listDesigns(false),
+      topDesignsByImpressions(1),
+      monthEventCounts(),
+      getKpiOverride(year, month, 'designs_this_month'),
+      getKpiOverride(year, month, 'impressions_this_month'),
+    ]);
 
-  // KPI computations
+  /* computed fallbacks */
+  const computedDesignsThisMonth = designs.filter(
+    (d) => new Date(d.design.createdAt as Date) >= startOfMonth,
+  ).length;
+  const computedImpressions = designs.reduce((s, d) => s + d.latestImpressions, 0);
+
+  /* final values (override wins if set) */
+  const designsThisMonth = designsOverride ?? computedDesignsThisMonth;
+  const impressionsThisMonth = impressionsOverride ?? computedImpressions;
+
+  /* other KPIs */
   const health = computeHealthScore(
     summaries,
     monthCounts.thisMonth.positive,
     monthCounts.thisMonth.total,
   );
-
-  const designsThisMonth = designs.filter(
-    (d) => new Date(d.design.createdAt as Date) >= startOfMonth,
-  ).length;
-
-  const totalImpressions = designs.reduce((s, d) => s + d.latestImpressions, 0);
-
   const sortedByScore = [...summaries].sort((a, b) => b.score - a.score);
   const topPerformer = sortedByScore[0] ?? null;
   const topPiece = topDesigns[0] ?? null;
 
   const evDelta = monthCounts.thisMonth.total - monthCounts.lastMonth.total;
-  const impDelta = null; // impressions are cumulative, delta not meaningful without per-month tracking
-
   const monthLabel = now.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
 
   return (
     <div className="space-y-10">
 
-      {/* ── Page header ──────────────────────────────────────── */}
+      {/* ── header ───────────────────────────────────────────── */}
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
           <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
@@ -118,8 +119,9 @@ export default async function TeamPage() {
         <ScoringInfo />
       </div>
 
-      {/* ── 6 KPI tiles ──────────────────────────────────────── */}
+      {/* ── KPI tiles ────────────────────────────────────────── */}
       <section className="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-6">
+
         {/* 1 — Team Health */}
         <KpiTile
           icon={<BarChart3 className="h-4 w-4" />}
@@ -128,23 +130,30 @@ export default async function TeamPage() {
           valueSuffix={summaries.length > 0 ? '/100' : undefined}
           sub={health.label}
           subColor={health.color}
-          wide
         />
 
-        {/* 2 — Designs produced */}
-        <KpiTile
+        {/* 2 — Designs this month (editable) */}
+        <EditableKpiTile
           icon={<Layers className="h-4 w-4" />}
           label="Designs this month"
-          value={designsThisMonth.toString()}
-          sub={`${designs.length} total active`}
+          displayValue={designsThisMonth.toString()}
+          rawValue={designsThisMonth}
+          sub={designsOverride == null ? `${designs.length} tracked in system` : 'client-reported total'}
+          isOverridden={designsOverride != null}
+          kpiKey="designs_this_month"
+          updateAction={updateKpiOverride}
         />
 
-        {/* 3 — Impressions */}
-        <KpiTile
+        {/* 3 — Impressions this month (editable) */}
+        <EditableKpiTile
           icon={<Eye className="h-4 w-4" />}
-          label="Impressions"
-          value={fmt(totalImpressions)}
-          sub="across all designs"
+          label="Impressions this month"
+          displayValue={fmt(impressionsThisMonth)}
+          rawValue={impressionsThisMonth}
+          sub={impressionsOverride == null ? 'from tracked designs' : 'client-reported total'}
+          isOverridden={impressionsOverride != null}
+          kpiKey="impressions_this_month"
+          updateAction={updateKpiOverride}
         />
 
         {/* 4 — Top piece */}
@@ -178,19 +187,18 @@ export default async function TeamPage() {
           sub={`${monthCounts.thisMonth.total} this · ${monthCounts.lastMonth.total} last`}
           deltaSign={evDelta === 0 ? 'flat' : evDelta > 0 ? 'up' : 'down'}
         />
+
       </section>
 
       {/* ── Team grid ────────────────────────────────────────── */}
       <section className="space-y-4">
-        <div className="flex items-center justify-between">
-          <div>
-            <h2 className="font-display text-2xl font-semibold tracking-tight">
-              {summaries.length} member{summaries.length === 1 ? '' : 's'}
-            </h2>
-            <p className="text-sm text-muted-foreground">
-              Click any card to see the full picture — events, scores, trends.
-            </p>
-          </div>
+        <div>
+          <h2 className="font-display text-2xl font-semibold tracking-tight">
+            {summaries.length} member{summaries.length === 1 ? '' : 's'}
+          </h2>
+          <p className="text-sm text-muted-foreground">
+            Click any card to see the full picture — events, scores, trends.
+          </p>
         </div>
         <TeamGrid summaries={summaries} />
       </section>
@@ -199,7 +207,7 @@ export default async function TeamPage() {
   );
 }
 
-/* ─── KpiTile ─────────────────────────────────────────────────── */
+/* ─── static KpiTile ──────────────────────────────────────────── */
 function KpiTile({
   icon,
   label,
@@ -210,7 +218,6 @@ function KpiTile({
   subColor,
   deltaSign,
   href,
-  wide,
 }: {
   icon: React.ReactNode;
   label: string;
@@ -221,7 +228,6 @@ function KpiTile({
   subColor?: string;
   deltaSign?: 'up' | 'down' | 'flat';
   href?: string;
-  wide?: boolean;
 }) {
   const DeltaIcon =
     deltaSign === 'up' ? ArrowUp :
@@ -233,9 +239,7 @@ function KpiTile({
     'text-muted-foreground';
 
   const inner = (
-    <div
-      className={`flex flex-col gap-3 rounded-2xl border bg-card p-5 shadow-sm transition-shadow ${href ? 'hover:shadow-md' : ''} ${wide ? '' : ''}`}
-    >
+    <div className={`flex flex-col gap-3 rounded-2xl border bg-card p-5 shadow-sm transition-shadow ${href ? 'hover:shadow-md' : ''}`}>
       <div className="flex items-center gap-1.5 text-xs font-medium uppercase tracking-wider text-muted-foreground">
         {icon}
         <span>{label}</span>
