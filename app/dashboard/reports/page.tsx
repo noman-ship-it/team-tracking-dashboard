@@ -66,7 +66,7 @@ export default async function ReportsPage() {
     <div className="space-y-6">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-semibold">Reports</h1>
+          <h1 className="font-display text-3xl font-bold tracking-tight">Reports</h1>
           <p className="text-sm text-muted-foreground">
             Team overview · {monthName(month)} {year}
           </p>
@@ -80,7 +80,7 @@ export default async function ReportsPage() {
             <CardTitle className="text-sm text-muted-foreground">Team health</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-semibold tabular-nums">{teamHealthPct}%</p>
+            <p className="font-display text-4xl font-bold tabular-nums">{teamHealthPct}%</p>
             <p className="text-xs text-muted-foreground">average status across the team</p>
           </CardContent>
         </Card>

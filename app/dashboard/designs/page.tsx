@@ -38,7 +38,7 @@ export default async function DesignsPage() {
     <div className="space-y-8">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h1 className="text-3xl font-semibold tracking-tight">Designs &amp; impressions</h1>
+          <h1 className="font-display text-3xl font-bold tracking-tight">Designs &amp; impressions</h1>
           <p className="text-sm text-muted-foreground">
             Tie growth KPIs to specific design files and the people who made them.
           </p>

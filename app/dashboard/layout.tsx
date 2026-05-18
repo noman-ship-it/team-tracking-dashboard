@@ -18,10 +18,9 @@ export default async function DashboardLayout({ children }: { children: React.Re
             <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-gradient-to-br from-amber-400 via-orange-500 to-pink-500 text-xs font-bold text-white">
               T
             </span>
-            <span className="font-serif text-lg tracking-tight">TeamPulse</span>
+            <span className="font-display text-lg font-semibold tracking-tight">TeamPulse</span>
           </Link>
           <nav className="flex items-center gap-1 text-sm">
-            <NavLink href="/dashboard">Overview</NavLink>
             <NavLink href="/dashboard/team">Team</NavLink>
             <NavLink href="/dashboard/designs">Designs</NavLink>
             <NavLink href="/dashboard/reports">Reports</NavLink>

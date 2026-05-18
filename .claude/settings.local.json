@@ -68,7 +68,12 @@
       "Bash(pkill cloudflared *)",
       "Bash(command -v cloudflared)",
       "Read(//Users/hf/.local/bin/**)",
-      "Bash(GIT_AUTHOR_NAME='Noman Akram' GIT_AUTHOR_EMAIL=noman@podcutz.co.uk GIT_COMMITTER_NAME='Noman Akram' GIT_COMMITTER_EMAIL=noman@podcutz.co.uk git -c commit.gpgsign=false commit -q -m ' *)"
+      "Bash(GIT_AUTHOR_NAME='Noman Akram' GIT_AUTHOR_EMAIL=noman@podcutz.co.uk GIT_COMMITTER_NAME='Noman Akram' GIT_COMMITTER_EMAIL=noman@podcutz.co.uk git -c commit.gpgsign=false commit -q -m ' *)",
+      "Bash(npx tsc *)",
+      "Bash(node -e ' *)",
+      "Bash(sed -i '' 's/className=\"text-3xl font-semibold tracking-tight\">Designs/className=\"font-display text-3xl font-bold tracking-tight\">Designs/' \"/Users/hf/Claude Code/Team Tracking Dashboard/app/dashboard/designs/page.tsx\")",
+      "Bash(sed -i '' 's/className=\"text-3xl font-semibold\">{member/className=\"font-display text-3xl font-bold tracking-tight\">{member/' \"/Users/hf/Claude Code/Team Tracking Dashboard/app/dashboard/members/\"*/page.tsx)",
+      "Bash(sed -i '' 's/className=\"text-3xl font-semibold tabular-nums\">{round1\\(score\\)/className=\"font-display text-3xl font-bold tabular-nums\">{round1\\(score\\)/' \"/Users/hf/Claude Code/Team Tracking Dashboard/app/dashboard/members/\"*/page.tsx)"
     ]
   }
 }

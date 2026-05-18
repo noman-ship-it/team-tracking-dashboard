@@ -54,7 +54,7 @@ export function TeamGrid({ summaries }: { summaries: MemberSummary[] }) {
         ))}
         {sorted.length === 0 && (
           <p className="col-span-full rounded-md border border-dashed p-8 text-center text-sm text-muted-foreground">
-            No team members yet. Add one in <a href="/dashboard/team" className="underline">Team</a>.
+            No team members yet. Add one in <a href="/dashboard/manage" className="underline">Manage</a>.
           </p>
         )}
       </div>

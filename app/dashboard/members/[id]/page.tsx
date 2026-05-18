@@ -48,7 +48,7 @@ export default async function MemberProfile({ params }: { params: Promise<{ id: 
 
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-semibold">{member.name}</h1>
+          <h1 className="font-display text-3xl font-bold tracking-tight">{member.name}</h1>
           <p className="text-sm text-muted-foreground">
             {member.role} · started {formatDate(startDate)}
           </p>
@@ -64,7 +64,7 @@ export default async function MemberProfile({ params }: { params: Promise<{ id: 
           <CardContent className="space-y-3">
             <div className="flex items-center gap-3">
               <StatusBadge status={status} size="lg" />
-              <span className="text-3xl font-semibold tabular-nums">{round1(score)}</span>
+              <span className="font-display text-3xl font-bold tabular-nums">{round1(score)}</span>
               <span className={`flex items-center gap-1 text-sm tabular-nums ${trendClass}`}>
                 <TrendIcon className="h-4 w-4" />
                 {scoreDelta == null ? '—' : `${scoreDelta > 0 ? '+' : ''}${round1(scoreDelta)} vs last month`}

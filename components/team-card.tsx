@@ -30,7 +30,7 @@ export function TeamCard({ summary }: { summary: MemberSummary }) {
       </CardHeader>
       <CardContent className="flex flex-1 flex-col justify-between gap-4 pt-2">
         <div className="flex items-baseline gap-2">
-          <span className="text-3xl font-semibold tabular-nums">{round1(score)}</span>
+          <span className="font-display text-3xl font-bold tabular-nums">{round1(score)}</span>
           <span className={`flex items-center gap-0.5 text-sm tabular-nums ${trendClass}`}>
             <TrendIcon className="h-3.5 w-3.5" />
             {scoreDelta == null ? '—' : `${scoreDelta > 0 ? '+' : ''}${round1(scoreDelta)}`}
