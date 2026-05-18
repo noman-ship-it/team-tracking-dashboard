@@ -65,7 +65,10 @@
       "Bash(mv /tmp/cloudflared ~/.local/bin/cloudflared)",
       "Bash(chmod +x ~/.local/bin/cloudflared)",
       "Bash(rm /tmp/cf.tgz)",
-      "Bash(pkill cloudflared *)"
+      "Bash(pkill cloudflared *)",
+      "Bash(command -v cloudflared)",
+      "Read(//Users/hf/.local/bin/**)",
+      "Bash(GIT_AUTHOR_NAME='Noman Akram' GIT_AUTHOR_EMAIL=noman@podcutz.co.uk GIT_COMMITTER_NAME='Noman Akram' GIT_COMMITTER_EMAIL=noman@podcutz.co.uk git -c commit.gpgsign=false commit -q -m ' *)"
     ]
   }
 }

@@ -12,16 +12,20 @@ export default async function DashboardLayout({ children }: { children: React.Re
 
   return (
     <div className="flex min-h-screen flex-col">
-      <header className="sticky top-0 z-30 border-b bg-background/95 backdrop-blur">
-        <div className="container flex h-14 items-center gap-4">
-          <Link href="/dashboard" className="text-sm font-semibold">
-            Team Tracking
+      <header className="sticky top-0 z-30 border-b bg-background/85 backdrop-blur">
+        <div className="container flex h-16 items-center gap-4">
+          <Link href="/dashboard" className="flex items-center gap-2">
+            <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-gradient-to-br from-amber-400 via-orange-500 to-pink-500 text-xs font-bold text-white">
+              T
+            </span>
+            <span className="font-serif text-lg tracking-tight">TeamPulse</span>
           </Link>
           <nav className="flex items-center gap-1 text-sm">
-            <NavLink href="/dashboard">Team</NavLink>
+            <NavLink href="/dashboard">Overview</NavLink>
+            <NavLink href="/dashboard/team">Team</NavLink>
             <NavLink href="/dashboard/designs">Designs</NavLink>
             <NavLink href="/dashboard/reports">Reports</NavLink>
-            {role === 'primary' && <NavLink href="/dashboard/team">Manage</NavLink>}
+            {role === 'primary' && <NavLink href="/dashboard/manage">Manage</NavLink>}
           </nav>
           <div className="ml-auto flex items-center gap-2">
             <span className="hidden text-xs text-muted-foreground sm:inline">
@@ -32,7 +36,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
           </div>
         </div>
       </header>
-      <main className="container flex-1 py-6">{children}</main>
+      <main className="container flex-1 py-8">{children}</main>
     </div>
   );
 }
@@ -41,7 +45,7 @@ function NavLink({ href, children }: { href: string; children: React.ReactNode }
   return (
     <Link
       href={href}
-      className="rounded-md px-3 py-1.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+      className="rounded-full px-3 py-1.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
     >
       {children}
     </Link>
